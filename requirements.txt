@@ -1,1 +1,8 @@
 opencv-python
+
+# dataset
+datasets
+pillow
+tqdm
+
+gradio
