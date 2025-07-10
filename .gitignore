@@ -3,3 +3,4 @@
 /tinyros/build
 /tinyros/*.si4project
 /tinyros/rostopic_subscribers.cpp
+/logs
