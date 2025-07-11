@@ -26,10 +26,11 @@ def snapshot(side, result):
     cv2.imwrite(right_path, result.right.img)
     return glob.glob(f"data/calibrate/{side}/*.jpg")
 
-def remove(evt: gr.SelectData):
+def remove(side, evt: gr.SelectData):
     value = evt.value
     orig_name = value["image"]["orig_name"]
-    print(f"Selected sample path: {orig_name}")
+    print(f"Selected sample path at {side}: {orig_name}")
+    return list_calibrate_files(side)
 
 with gr.Blocks() as demo:
     gr.Markdown("# Stereo Alignment Streaming (Gradio)")
@@ -45,7 +46,7 @@ with gr.Blocks() as demo:
             gallery = gr.Gallery(label="Snapshot", columns=3, height="360px", allow_preview=False)
 
     snapshot_btn.click(fn=snapshot, inputs=[side, state], outputs=gallery)
-    gallery.select(fn=remove, inputs=None, outputs=gallery)
+    gallery.select(fn=remove, inputs=side, outputs=gallery)
 
     demo.load(fn=streaming, inputs=None, outputs=[image, state])
     demo.load(fn=list_calibrate_files, inputs=None, outputs=gallery)
