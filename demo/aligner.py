@@ -1,5 +1,5 @@
 import gradio as gr
-import os
+import os, cv2
 from utils.tools import Camera
 from utils.stereo import StereoAligner
 
