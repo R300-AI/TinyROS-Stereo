@@ -1,9 +1,7 @@
-import cv2
-import numpy as np
 import gradio as gr
 import os
-import time
-from utils.stereo import Capture, StereoAligner
+from util.tools import Camera
+from utils.stereo import StereoAligner
 
 capL, capR = Capture(5), Capture(7)
 aligner = StereoAligner(chessboard_size=(9, 6))
