@@ -50,7 +50,7 @@ class Result():
             text = "Chessboard not detected."
         font = cv2.FONT_HERSHEY_SIMPLEX
         font_scale = 0.5
-        thickness_text = 1.5
+        thickness_text = 1
         color_text = (255, 255, 255)
         (tw, th), _ = cv2.getTextSize(text, font, font_scale, thickness_text)
         x = merged.shape[1] - tw - 20
