@@ -45,7 +45,7 @@ with gr.Blocks() as demo:
             gallery = gr.Gallery(label="Snapshot", columns=3, height="360px", allow_preview=False)
 
     snapshot_btn.click(fn=snapshot, inputs=[side, state], outputs=gallery)
-    gallery.select(fn=remove, inputs=[gallery], outputs=None)
+    gallery.select(fn=remove, inputs=None, outputs=gallery)
 
     demo.load(fn=streaming, inputs=None, outputs=[image, state])
     demo.load(fn=list_calibrate_files, inputs=None, outputs=gallery)
