@@ -3,7 +3,7 @@ import os
 from utils.tools import Camera
 from utils.stereo import StereoAligner
 
-capL, capR = Capture(5), Capture(7)
+capL, capR = Camera(5), Camera(7)
 aligner = StereoAligner(chessboard_size=(9, 6))
 
 os.makedirs('data/calibrate/left', exist_ok=True)
