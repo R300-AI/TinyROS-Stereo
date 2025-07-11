@@ -4,7 +4,6 @@ from utils.tools import Camera
 from utils.stereo import StereoAligner
 
 capL, capR = Camera(5), Camera(7)
-
 os.makedirs('data/calibrate/left', exist_ok=True)
 os.makedirs('data/calibrate/right', exist_ok=True)
 
@@ -20,16 +19,14 @@ def list_calibrate_files(side):
 
 def snapshot(side, result):
     file_name = f"{ time.strftime('%Y%m%d_%H%M%S')}.jpg"
-    left_path = os.path.join('data/calibrate/left', file_name)
-    right_path = os.path.join('data/calibrate/right', file_name)
-    cv2.imwrite(left_path, result.left.img)
-    cv2.imwrite(right_path, result.right.img)
+    cv2.imwrite(os.path.join('data/calibrate/left', file_name), result.left.img)
+    cv2.imwrite(os.path.join('data/calibrate/right', file_name), result.right.img)
     return glob.glob(f"data/calibrate/{side}/*.jpg")
 
 def remove(side, evt: gr.SelectData):
-    value = evt.value
-    orig_name = value["image"]["orig_name"]
-    print(f"Selected sample path at {side}: {orig_name}")
+    orig_name = evt.value["image"]["orig_name"]
+    os.remove(os.path.join('data/calibrate/left', orig_name))
+    os.remove(os.path.join('data/calibrate/right', orig_name))
     return list_calibrate_files(side)
 
 with gr.Blocks() as demo:
@@ -43,8 +40,7 @@ with gr.Blocks() as demo:
         with gr.Column(scale=2):
             image = gr.Image(label="Stereo Merged")
         with gr.Column(scale=1):
-            gallery = gr.Gallery(label="Snapshot", columns=3, height="360px", allow_preview=False)
-
+            gallery = gr.Gallery(label="Snapshot", columns=3, height="360px", allow_preview=False, object_fit="cover")
     snapshot_btn.click(fn=snapshot, inputs=[side, state], outputs=gallery)
     gallery.select(fn=remove, inputs=side, outputs=gallery)
 
