@@ -23,7 +23,7 @@ def snapshot(side, result):
     cv2.imwrite(right_path, result.right.img)
 
     print(f"data/calibrate/{side}/*.jpg")
-    image_paths = glob.glob("data/calibrate/{side}/*.jpg")
+    image_paths = glob.glob(f"data/calibrate/{side}/*.jpg")
     return image_paths
 
 with gr.Blocks() as demo:
