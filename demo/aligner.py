@@ -26,10 +26,10 @@ def snapshot(side, result):
     cv2.imwrite(right_path, result.right.img)
     return glob.glob(f"data/calibrate/{side}/*.jpg")
 
-def remove(selected):
-    print(f"Selected sample path: {selected}")
-    return None
-
+def remove(evt: gr.SelectData):
+    value = evt.value
+    orig_name = value["image"]["orig_name"]
+    print(f"Selected sample path: {orig_name}")
 
 with gr.Blocks() as demo:
     gr.Markdown("# Stereo Alignment Streaming (Gradio)")
