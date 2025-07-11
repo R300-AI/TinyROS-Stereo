@@ -1,22 +1,20 @@
 import cv2
 import numpy as np
-import time
-from utils.tools import Camera
 from utils.stereo import StereoAligner, StereoCalibrator
 
-capL, capR = Camera(5), Camera(7)
+class Capture():
+    
+def read(cap, shape):
+    ret, frame = capL.read()
+    if not ret:
+        return False, np.random.randint(0, 256, shape, dtype=np.uint8)
+    return ret, frame
+
+capL = cv2.VideoCapture(0)
+capR = cv2.VideoCapture(1)
+
 aligner = StereoAligner(chessboard_size=(9, 6))
-
 while True:
-    frameL = capL.read()
-    frameR = capR.read()
-    result = aligner.fit(frameL, frameR)
-    merged = result.plot(threadhold=2.0)
-    cv2.imshow('Stereo Alignment Streaming', merged)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-#cv2.estimateAffinePartial2D
-capL.release()
-capR.release()
-cv2.destroyAllWindows()
-
+    read
+    retL, frameL = capL.read()
+    retR, frameR = capR.read()

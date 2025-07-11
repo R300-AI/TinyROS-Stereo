@@ -13,8 +13,7 @@ def streaming(threadhold):
     while True:
         frameL, frameR = capL.read(), capR.read()
         result = aligner.fit(frameL, frameR)
-        img = result.plot(threadhold=threadhold)
-        yield img, result
+        yield cv2.cvtColor(result.plot(threadhold=threadhold), cv2.COLOR_BGR2RGB), result
 
 with gr.Blocks() as demo:
     gr.Markdown("# Stereo Alignment Streaming (Gradio)")
