@@ -15,8 +15,8 @@ def streaming():
         result = aligner.fit(frameL, frameR)
         yield cv2.cvtColor(result.plot(threadhold=threadhold.value, scale=1), cv2.COLOR_BGR2RGB), result
 
-def initial_gallery(side):
-    return glob.glob(f"data/calibrate/{side}/*.jpg")
+def list_calibrate_files(side):
+    return glob.glob(f"data/calibrate/left/*.jpg")
 
 def snapshot(side, result):
     file_name = f"{ time.strftime('%Y%m%d_%H%M%S')}.jpg"
@@ -46,7 +46,8 @@ with gr.Blocks() as demo:
 
     snapshot_btn.click(fn=snapshot, inputs=[side, state], outputs=gallery)
     gallery.select(fn=remove, inputs=[gallery], outputs=None)
+
     demo.load(fn=streaming, inputs=None, outputs=[image, state])
-    gallery.load(fn=initial_gallery, inputs=[side], outputs=gallery)
+    demo.load(fn=list_calibrate_files, inputs=None, outputs=gallery)
     
 demo.launch(share=False, inbrowser=True)
