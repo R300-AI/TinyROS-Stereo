@@ -35,9 +35,11 @@ with gr.Blocks() as demo:
     gr.Markdown("# Stereo Alignment Streaming (Gradio)")
     state = gr.State(None)
     with gr.Row():
-        side = gr.Dropdown(value="left", choices=["left", "right"], label="Select Side")
-        threadhold = gr.Number(value=1, label="Threadhold", precision=1, step=0.1)
-        snapshot_btn = gr.Button("Take Snapshot")
+        with gr.Column(scale=2):
+            side = gr.Dropdown(value="left", choices=["left", "right"], label="Select Side")
+            threadhold = gr.Number(value=1, label="Threadhold", precision=1, step=0.1)
+        with gr.Column(scale=1):
+            snapshot_btn = gr.Button("Take Snapshot")
     with gr.Row():
         with gr.Column(scale=2):
             image = gr.Image(label="Stereo Merged")
