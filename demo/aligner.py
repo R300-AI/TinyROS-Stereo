@@ -21,7 +21,7 @@ def get_merged(threadhold):
 with gr.Blocks() as demo:
     gr.Markdown("# Stereo Alignment Streaming (Gradio)")
     threadhold = gr.Number(value=2.0, label="Threadhold", precision=1, step=0.1)
-    image = gr.Image(label="Stereo Merged", live=True)
+    image = gr.Image(label="Stereo Merged")
     state = gr.State(None)
     demo.load(fn=get_merged, inputs=[threadhold], outputs=[image, state])
 
