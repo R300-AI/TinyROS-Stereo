@@ -13,12 +13,12 @@ def streaming():
         aligner = StereoAligner(align_reference=side.value, chessboard_size=(9, 6))
         result = aligner.fit(frameL, frameR)
         interactive = result.alignment_mean is not None and result.alignment_mean < threadhold.value
-        yield cv2.cvtColor(result.plot(threadhold=threadhold.value, scale=1), cv2.COLOR_BGR2RGB), result, gr.Button.update(interactive=interactive)
+        yield cv2.cvtColor(result.plot(threadhold=threadhold.value, scale=1), cv2.COLOR_BGR2RGB), result, gr.update(interactive=interactive)
 
 def list_calibrate_files(side):
     return glob.glob(f"data/calibrate/left/*.jpg")
 
-def snapshot(side, result):
+def take_snapshot(side, result):
     file_name = f"{ time.strftime('%Y%m%d_%H%M%S')}.jpg"
     cv2.imwrite(os.path.join('data/calibrate/left', file_name), result.left.img)
     cv2.imwrite(os.path.join('data/calibrate/right', file_name), result.right.img)
@@ -38,16 +38,16 @@ with gr.Blocks() as demo:
             side = gr.Dropdown(value="left", choices=["left", "right"], label="Select Side")
             threadhold = gr.Number(value=1, label="Threadhold", precision=1, step=0.1)
         with gr.Column(scale=1):
-            snapshot_btn = gr.Button("Take Snapshot")
+            snapshot = gr.Button("Take Snapshot")
     with gr.Row():
         with gr.Column(scale=2):
             image = gr.Image(label="Stereo Merged")
         with gr.Column(scale=1):
             gallery = gr.Gallery(label="Snapshot", columns=3, height="360px", allow_preview=False, object_fit="contain")
-    snapshot_btn.click(fn=snapshot, inputs=[side, state], outputs=gallery)
+    snapshot.click(fn=take_snapshot, inputs=[side, state], outputs=gallery)
     gallery.select(fn=remove, inputs=side, outputs=gallery)
 
-    demo.load(fn=streaming, inputs=None, outputs=[image, state, snapshot_btn])
+    demo.load(fn=streaming, inputs=None, outputs=[image, state, snapshot])
     demo.load(fn=list_calibrate_files, inputs=side, outputs=gallery)
     
 demo.launch(share=False, inbrowser=True)
