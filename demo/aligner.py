@@ -15,6 +15,9 @@ def streaming():
         result = aligner.fit(frameL, frameR)
         yield cv2.cvtColor(result.plot(threadhold=threadhold.value, scale=1), cv2.COLOR_BGR2RGB), result
 
+def initial_gallery(side):
+    return glob.glob(f"data/calibrate/{side}/*.jpg")
+
 def snapshot(side, result):
     file_name = f"{ time.strftime('%Y%m%d_%H%M%S')}.jpg"
     left_path = os.path.join('data/calibrate/left', file_name)
@@ -22,7 +25,6 @@ def snapshot(side, result):
     cv2.imwrite(left_path, result.left.img)
     cv2.imwrite(right_path, result.right.img)
     return glob.glob(f"data/calibrate/{side}/*.jpg")
-
 
 def remove(selected):
     print(f"Selected sample path: {selected}")
@@ -40,9 +42,11 @@ with gr.Blocks() as demo:
         with gr.Column(scale=2):
             image = gr.Image(label="Stereo Merged")
         with gr.Column(scale=1):
-            gallery = gr.Gallery(label="Snapshot", height="210px", allow_preview=False)
+            gallery = gr.Gallery(label="Snapshot", columns=3, height="360px", allow_preview=False)
 
     snapshot_btn.click(fn=snapshot, inputs=[side, state], outputs=gallery)
-    demo.load(fn=streaming, inputs=None, outputs=[image, state])
     gallery.select(fn=remove, inputs=[gallery], outputs=None)
+    demo.load(fn=streaming, inputs=None, outputs=[image, state])
+    gallery.load(fn=initial_gallery, inputs=[side], outputs=gallery)
+    
 demo.launch(share=False, inbrowser=True)
