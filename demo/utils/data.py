@@ -35,7 +35,7 @@ class Result():
                 else:
                     color = (0, 0, 255)
             else:
-                color = (255, 0, 0)
+                color = (128, 128, 128)
         for i in range(1, num_lines + 1):
             y = i * interval
             cv2.line(imgL_draw, (0, y), (w, y), color, thickness)
@@ -50,7 +50,7 @@ class Result():
             text = "Chessboard not detected."
         font = cv2.FONT_HERSHEY_SIMPLEX
         font_scale = 0.5
-        thickness_text = 2
+        thickness_text = 1.5
         color_text = (255, 255, 255)
         (tw, th), _ = cv2.getTextSize(text, font, font_scale, thickness_text)
         x = merged.shape[1] - tw - 20
