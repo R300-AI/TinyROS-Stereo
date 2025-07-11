@@ -40,11 +40,11 @@ with gr.Blocks() as demo:
         with gr.Column(scale=2):
             image = gr.Image(label="Stereo Merged")
         with gr.Column(scale=1):
-            gallery = gr.Gallery(label="Snapshot", columns=3, height="360px", allow_preview=False, object_fit="cover")
+            gallery = gr.Gallery(label="Snapshot", columns=3, height="360px", allow_preview=False, object_fit="contain")
     snapshot_btn.click(fn=snapshot, inputs=[side, state], outputs=gallery)
     gallery.select(fn=remove, inputs=side, outputs=gallery)
 
     demo.load(fn=streaming, inputs=None, outputs=[image, state])
-    demo.load(fn=list_calibrate_files, inputs=None, outputs=gallery)
+    demo.load(fn=list_calibrate_files, inputs=side, outputs=gallery)
     
 demo.launch(share=False, inbrowser=True)
