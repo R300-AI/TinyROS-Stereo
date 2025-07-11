@@ -12,8 +12,7 @@ def streaming():
         frameL, frameR = capL.read(), capR.read()
         aligner = StereoAligner(align_reference=side.value, chessboard_size=(9, 6))
         result = aligner.fit(frameL, frameR)
-        # 判斷是否可互動
-        interactive = result.alignment_mean < threadhold.value
+        interactive = result.alignment_mean is not None and result.alignment_mean < threadhold.value
         yield cv2.cvtColor(result.plot(threadhold=threadhold.value, scale=1), cv2.COLOR_BGR2RGB), result, gr.Button.update(interactive=interactive)
 
 def list_calibrate_files(side):
