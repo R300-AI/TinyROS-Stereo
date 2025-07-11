@@ -12,7 +12,9 @@ def streaming():
         frameL, frameR = capL.read(), capR.read()
         aligner = StereoAligner(align_reference=side.value, chessboard_size=(9, 6))
         result = aligner.fit(frameL, frameR)
-        yield cv2.cvtColor(result.plot(threadhold=threadhold.value, scale=1), cv2.COLOR_BGR2RGB), result
+        # 判斷是否可互動
+        interactive = result.alignment_mean < threadhold.value
+        yield cv2.cvtColor(result.plot(threadhold=threadhold.value, scale=1), cv2.COLOR_BGR2RGB), result, gr.Button.update(interactive=interactive)
 
 def list_calibrate_files(side):
     return glob.glob(f"data/calibrate/left/*.jpg")
@@ -34,7 +36,7 @@ with gr.Blocks() as demo:
     state = gr.State(None)
     with gr.Row():
         side = gr.Dropdown(value="left", choices=["left", "right"], label="Select Side")
-        threadhold = gr.Number(value=1.5, label="Threadhold", precision=1, step=0.1)
+        threadhold = gr.Number(value=1, label="Threadhold", precision=1, step=0.1)
         snapshot_btn = gr.Button("Take Snapshot")
     with gr.Row():
         with gr.Column(scale=2):
@@ -44,7 +46,7 @@ with gr.Blocks() as demo:
     snapshot_btn.click(fn=snapshot, inputs=[side, state], outputs=gallery)
     gallery.select(fn=remove, inputs=side, outputs=gallery)
 
-    demo.load(fn=streaming, inputs=None, outputs=[image, state])
+    demo.load(fn=streaming, inputs=None, outputs=[image, state, snapshot_btn])
     demo.load(fn=list_calibrate_files, inputs=side, outputs=gallery)
     
 demo.launch(share=False, inbrowser=True)
