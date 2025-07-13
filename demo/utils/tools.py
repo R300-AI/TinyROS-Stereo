@@ -34,5 +34,5 @@ class ChessBaord():
         plt.axis('off')
         plt.show()
     
-    def generate(self, samples=1):
-        return [self.object_points for _ in range(samples)]
+    def sampling(self, size=1):
+        return [self.object_points for _ in range(size)]

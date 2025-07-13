@@ -3,6 +3,8 @@ import numpy as np
 
 class Image():
     def __init__(self, img, chessboard):
+        if isinstance(img, str):
+            img = cv2.imread(img)
         self.img = img
         self.img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         self.chessboard = chessboard
@@ -33,7 +35,7 @@ class Result():
                 if self.alignment_mean < threadhold:
                     color = (0, 255, 0)
                 else:
-                    color = (0, 0, 255)
+                    color = (0, 255, 255)
             else:
                 color = (128, 128, 128)
         for i in range(1, num_lines + 1):
